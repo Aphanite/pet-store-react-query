@@ -5,29 +5,31 @@ export function Pets() {
     queryKey: ["pets"],
     queryFn: async () => {
       const response = await fetch(
-        `https://petstore.swagger.io/v2/pet/findByStatus?status=happy`
+        `https://petstore.swagger.io/v2/pet/findByStatus?status=sad`
       );
       return await response.json();
     },
   });
   console.log("result", result);
-  const { isPending, isSuccess, isError, data, error } = result;
+  const { isPending, isError, data, error } = result;
   console.log("data", data);
 
   if (isPending) return <p>Loading...</p>;
 
-  if (isError) return <p>Something went wrong...</p>;
+  if (isError) return <p>Oh, no! {error.message}</p>;
 
   return (
     <div>
       <h1>Available pets!</h1>
-      {data.slice(0, 20).map(({ id, name }: any) => {
-        return (
-          <div key={id}>
-            <h3>{name}</h3>
-          </div>
-        );
-      })}
+      <div className="flex wrap gap-2">
+        {data.slice(0, 20).map(({ id, name }: any, index: number) => {
+          return (
+            <div key={`${id}-${index}`}>
+              <h3>{name}</h3>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
