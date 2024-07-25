@@ -27,9 +27,9 @@ export function Albums() {
 
   return (
     <div>
-      <h1>Albums!</h1>
-      <div className="flex wrap gap-2 my-4">
-        {data.slice(0, 20).map((album: Album) => {
+      <h1>Albums</h1>
+      <div className="flex flex-wrap gap-2 my-4 justify-evenly">
+        {data.slice(0, 10).map((album: Album) => {
           return <AlbumCard {...album} />;
         })}
       </div>
