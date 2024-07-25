@@ -1,11 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
+import { AlbumCard } from "./AlbumCard";
 
-export function Pets() {
+export type Album = {
+  id: number;
+  title: string;
+  userId: number;
+};
+
+export function Albums() {
   const result = useQuery({
     queryKey: ["pets"],
     queryFn: async () => {
       const response = await fetch(
-        `https://petstore.swagger.io/v2/pet/findByStatus?status=sad`
+        "https://jsonplaceholder.typicode.com/albums"
       );
       return await response.json();
     },
@@ -20,14 +27,10 @@ export function Pets() {
 
   return (
     <div>
-      <h1>Available pets!</h1>
-      <div className="flex wrap gap-2">
-        {data.slice(0, 20).map(({ id, name }: any, index: number) => {
-          return (
-            <div key={`${id}-${index}`}>
-              <h3>{name}</h3>
-            </div>
-          );
+      <h1>Albums!</h1>
+      <div className="flex wrap gap-2 my-4">
+        {data.slice(0, 20).map((album: Album) => {
+          return <AlbumCard {...album} />;
         })}
       </div>
     </div>
