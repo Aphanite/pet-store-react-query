@@ -9,7 +9,7 @@ export type Album = {
 
 export function Albums() {
   const result = useQuery({
-    queryKey: ["pets"],
+    queryKey: ["albums"],
     queryFn: async () => {
       const response = await fetch(
         "https://jsonplaceholder.typicode.com/albums"
@@ -29,7 +29,7 @@ export function Albums() {
     <div>
       <h1>Albums</h1>
       <div className="flex flex-wrap gap-2 my-4 justify-evenly">
-        {data.slice(0, 10).map((album: Album) => {
+        {data.map((album: Album) => {
           return <AlbumCard {...album} />;
         })}
       </div>

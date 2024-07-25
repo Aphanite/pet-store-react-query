@@ -1,7 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Album } from "./Albums";
 
 export function AlbumCard({ id, title }: Album) {
+  const queryClient = useQueryClient();
+
   const { isPending, isError, isSuccess, data } = useQuery({
     queryKey: [`album-photo-${id}`],
     queryFn: async () => {
@@ -12,7 +14,23 @@ export function AlbumCard({ id, title }: Album) {
     },
   });
 
-  console.log("data", data);
+  const mutation = useMutation({
+    mutationFn: async (albumId: number) => {
+      const response = await fetch(
+        `https://jsonplaceholder.typicode.com/albums/${albumId}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      return await response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["albums"] });
+    },
+  });
+
+  console.log("data", mutation?.data);
   const firstImage = data?.[0];
 
   return (
@@ -29,6 +47,14 @@ export function AlbumCard({ id, title }: Album) {
         />
       )}
       <h3 className="uppercase font-bold">{title}</h3>
+      <button
+        aria-label="delete-album"
+        onClick={() => {
+          mutation.mutate(id);
+        }}
+      >
+        Delete
+      </button>
     </div>
   );
 }
