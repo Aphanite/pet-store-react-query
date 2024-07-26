@@ -17,7 +17,6 @@ export function Albums() {
       return await response.json();
     },
   });
-  console.log("result", result);
   const { isPending, isError, data, error } = result;
   console.log("data", data);
 
@@ -34,7 +33,7 @@ export function Albums() {
             return album.title.includes("omnis");
           })
           .map((album: Album) => {
-            return <AlbumCard {...album} />;
+            return <AlbumCard key={album.id} {...album} />;
           })}
       </div>
     </div>
