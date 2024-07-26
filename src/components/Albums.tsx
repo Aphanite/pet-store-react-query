@@ -29,9 +29,13 @@ export function Albums() {
     <div>
       <h1>Albums</h1>
       <div className="flex flex-wrap gap-2 my-4 justify-evenly">
-        {data.map((album: Album) => {
-          return <AlbumCard {...album} />;
-        })}
+        {data
+          .filter((album: Album) => {
+            return album.title.includes("omnis");
+          })
+          .map((album: Album) => {
+            return <AlbumCard {...album} />;
+          })}
       </div>
     </div>
   );
