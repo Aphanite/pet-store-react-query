@@ -16,15 +16,17 @@ export function AlbumCard(album: Album) {
 
       return await response.json();
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["albums"] });
+    onSuccess: (_, deletedAlbumId) => {
+      queryClient.setQueryData(["albums"], (oldData: Album[]) => {
+        return oldData.filter((album) => album.id !== deletedAlbumId);
+      });
     },
   });
 
   const updateMutation = useMutation({
     mutationFn: async (album: Album) => {
       const response = await fetch(
-        `https://jsonplaceholder.typicode.com/albums/${albumId}`,
+        `https://jsonplaceholder.typicode.com/albums/${album.id}`,
         {
           method: "PUT",
           body: JSON.stringify({
@@ -37,15 +39,17 @@ export function AlbumCard(album: Album) {
         }
       );
 
-      return await response.json();
+      const json = await response.json();
+      console.log(json);
+      return json;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["albums"] });
+      return queryClient.invalidateQueries({ queryKey: ["albums"] });
     },
   });
 
   return (
-    <div key={id} className="p-4 bg-slate-200 gap-2 justify-center">
+    <div className="p-4 bg-slate-200 gap-2 justify-center">
       <h3 className="uppercase font-bold">{title}</h3>
       <button
         aria-label="delete-album"
