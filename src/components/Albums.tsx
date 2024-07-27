@@ -11,9 +11,7 @@ export function Albums() {
   const result = useQuery({
     queryKey: ["albums"],
     queryFn: async () => {
-      const response = await fetch(
-        "https://jsonplaceholder.typicode.com/albums"
-      );
+      const response = await fetch("http://localhost:3001/albums");
       return await response.json();
     },
   });
